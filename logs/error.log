@@ -1,0 +1,4 @@
+{"detail":"Too Many Requests","level":"error","message":"Error fetching from X API:","service":"oluora-api","status":429,"timestamp":"2025-07-10T02:50:02.139Z","title":"Too Many Requests","type":"about:blank"}
+{"detail":"Too Many Requests","level":"error","message":"Error fetching from X API:","service":"oluora-api","status":429,"timestamp":"2025-07-10T03:10:01.229Z","title":"Too Many Requests","type":"about:blank"}
+{"detail":"Too Many Requests","level":"error","message":"Error fetching from X API:","service":"oluora-api","status":429,"timestamp":"2025-07-10T03:30:00.894Z","title":"Too Many Requests","type":"about:blank"}
+{"detail":"Too Many Requests","level":"error","message":"Error fetching from X API:","service":"oluora-api","status":429,"timestamp":"2025-07-10T03:50:01.153Z","title":"Too Many Requests","type":"about:blank"}

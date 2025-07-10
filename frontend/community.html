@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Platform</title>
+    <style>
+        :root {
+            --primary: #800020;
+            --primary-light: #a0002a;
+            --primary-dark: #600018;
+            --secondary: #D4AF37;
+            --accent: #006400;
+            --background: #fafafa;
+            --surface: #ffffff;
+            --surface-hover: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --border: #e5e7eb;
+            --border-light: #f3f4f6;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-buttons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button {
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .nav-button:hover {
+            color: var(--primary);
+            background-color: var(--surface-hover);
+        }
+
+        .nav-button.active {
+            color: var(--primary);
+            background-color: rgba(128, 0, 32, 0.1);
+        }
+
+        .nav-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 16px;
+            right: 16px;
+            height: 2px;
+            background: var(--gradient);
+            border-radius: 1px;
+        }
+
+        .nav-button.primary {
+            background: var(--gradient);
+            color: white;
+            font-weight: 600;
+        }
+
+        .nav-button.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card.create-form {
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.02) 0%, rgba(212, 175, 55, 0.02) 100%);
+            border: 2px dashed var(--border);
+        }
+
+        .card.create-form:hover {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.05) 0%, rgba(212, 175, 55, 0.05) 100%);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            background: var(--surface);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(128, 0, 32, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--text-muted);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-secondary);
+        }
+
+        .btn-success {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #005500;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status badges */
+        .status-badge {
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-proposed {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .status-scheduled {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-ongoing {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .status-completed {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Project cards */
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .vote-section {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .vote-btn.upvote {
+            color: var(--accent);
+        }
+
+        .vote-btn.upvote:hover {
+            background: rgba(0, 100, 0, 0.1);
+        }
+
+        .vote-btn.downvote {
+            color: var(--primary);
+        }
+
+        .vote-btn.downvote:hover {
+            background: rgba(128, 0, 32, 0.1);
+        }
+
+        .date-info {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .page-info {
+            padding: 8px 16px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Loading */
+        .loading-container {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease-out;
+            max-width: 400px;
+        }
+
+        .toast.success {
+            background: var(--accent);
+        }
+
+        .toast.error {
+            background: var(--primary);
+        }
+
+        .toast.info {
+            background: var(--secondary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 16px;
+            }
+
+            .nav-buttons {
+                gap: 4px;
+            }
+
+            .nav-button {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+
+            main {
+                padding: 24px 16px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .project-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .project-footer {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .vote-section {
+                width: 100%;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="nav-logo">C</div>
+                <h1 class="nav-title">Community Hub</h1>
+            </div>
+            <div class="nav-buttons">
+                <a href="#projects" class="nav-button active">Projects</a>
+                <a href="#townhalls" class="nav-button">Townhalls</a>
+                <a href="#xupdates" class="nav-button">X Updates</a>
+                <button onclick="healthCheck()" class="nav-button primary">Health Check</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <div class="section-header">
+                <h2 class="section-title">Community Projects</h2>
+                <p class="section-subtitle">Propose, vote, and track community initiatives that matter to you</p>
+            </div>
+
+            <!-- Create Project Form -->
+            <div class="card create-form">
+                <h3 style="margin-bottom: 20px; color: var(--text-primary);">💡 Propose New Project</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="projectTitle">Project Title</label>
+                        <input type="text" id="projectTitle" class="form-input" placeholder="Enter project title..."
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="projectDescription">Description</label>
+                        <textarea id="projectDescription" class="form-textarea"
+                            placeholder="Describe your project idea..." required></textarea>
+                    </div>
+                </div>
+                <button onclick="createProject()" class="btn btn-primary btn-full">
+                    <span>🚀</span> Submit Project
+                </button>
+            </div>
+
+            <!-- Projects List -->
+            <div id="projectsList">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading community projects...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Townhalls Section -->
+        <section id="townhalls" class="section">
+            <div class="section-header">
+                <h2 class="section-title">Community Townhalls</h2>
+                <p class="section-subtitle">Join discussions, share ideas, and connect with your neighbors</p>
+            </div>
+
+            <div id="townhallsList">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading townhall meetings...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- X Updates Section -->
+        <section id="xupdates" class="section">
+            <div class="section-header">
+                <h2 class="section-title">X Updates</h2>
+                <p class="section-subtitle">Stay updated with the latest community conversations</p>
+            </div>
+
+            <!-- Controls -->
+            <div class="card">
+                <div class="controls">
+                    <div class="control-group">
+                        <label class="form-label" for="xUpdatesAuthor">Author</label>
+                        <input type="text" id="xUpdatesAuthor" class="form-input" placeholder="Filter by author...">
+                    </div>
+                    <div class="control-group">
+                        <label class="form-label" for="xUpdatesFromDate">From Date</label>
+                        <input type="date" id="xUpdatesFromDate" class="form-input">
+                    </div>
+                    <div class="control-group">
+                        <label class="form-label" for="xUpdatesToDate">To Date</label>
+                        <input type="date" id="xUpdatesToDate" class="form-input">
+                    </div>
+                    <div class="control-group">
+                        <label class="form-label" for="xUpdatesLimit">Limit</label>
+                        <select id="xUpdatesLimit" class="form-select">
+                            <option value="10">10 posts</option>
+                            <option value="25">25 posts</option>
+                            <option value="50">50 posts</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <button onclick="loadXUpdates()" class="btn btn-primary">
+                            <span>🔍</span> Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- X Updates List -->
+            <div id="xUpdatesList">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading X updates...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="xUpdatesPagination" class="pagination">
+                <div class="pagination-controls">
+                    <button onclick="previousPage()" id="prevPageBtn" class="btn btn-secondary">
+                        ← Previous
+                    </button>
+                    <span id="pageInfo" class="page-info">Page 1 of 1</span>
+                    <button onclick="nextPage()" id="nextPageBtn" class="btn btn-secondary">
+                        Next →
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Global variables
+        let currentPage = 1;
+        let totalPages = 1;
+        let isLoading = false;
+
+        // Get dynamic base URL
+        const getBaseURL = () => {
+            const { protocol, hostname, port } = window.location;
+            return port && port !== '80' && port !== '443'
+                ? `${protocol}//${hostname}:${port}`
+                : `${protocol}//${hostname}`;
+        };
+
+        // const baseURL = getBaseURL();
+        const baseURL = 'http://localhost:3000';
+
+        // Utility functions
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 40000);
+        }
+
+        function showLoading(containerId) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+            <div class="loading-container">
+                <div class="spinner"></div>
+                <p class="loading-text">Loading...</p>
+            </div>
+        `;
+            }
+        }
+
+        function showEmptyState(containerId, title, message, icon = '📭') {
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = `
+            <div class="empty-state">
+                <div class="icon">${icon}</div>
+                <h3>${title}</h3>
+                <p>${message}</p>
+            </div>
+        `;
+            }
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Navigation
+        document.addEventListener('DOMContentLoaded', function () {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const sections = document.querySelectorAll('section');
+
+            navButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    if (this.getAttribute('href')) {
+                        e.preventDefault();
+                        const targetId = this.getAttribute('href').substring(1);
+
+                        navButtons.forEach(btn => btn.classList.remove('active'));
+                        this.classList.add('active');
+
+                        const targetSection = document.getElementById(targetId);
+                        if (targetSection) {
+                            targetSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
+                });
+            });
+
+            // Initialize data loading
+            loadProjects();
+            loadTownhalls();
+            loadXUpdates();
+        });
+
+        // Projects functions
+        async function loadProjects() {
+            try {
+                showLoading('projectsList');
+                const response = await fetch(`${baseURL}/api/projects`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const projects = await response.json();
+                displayProjects(projects);
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                showEmptyState('projectsList', 'Unable to load projects', 'Please check your connection and try again', '⚠️');
+            }
+        }
+
+        function displayProjects(projects) {
+            const container = document.getElementById('projectsList');
+
+            if (!projects || projects.length === 0) {
+                showEmptyState('projectsList', 'No projects yet', 'Be the first to propose a community project!', '🚀');
+                return;
+            }
+
+            container.innerHTML = projects.map(project => `
+        <div class="card">
+            <div class="project-header">
+                <div class="project-info">
+                    <h3 class="project-title">${escapeHtml(project.title || 'Untitled Project')}</h3>
+                    <p class="project-description">${escapeHtml(project.description || 'No description available')}</p>
+                </div>
+                <span class="status-badge status-${(project.status || 'proposed').toLowerCase()}">${project.status || 'PROPOSED'}</span>
+            </div>
+            <div class="project-footer">
+                <div class="vote-section">
+                    <button onclick="voteProject(${project.id}, 'UPVOTE')" class="vote-btn upvote">
+                        <span>👍</span>
+                        <span>${project.upvotes || 0}</span>
+                    </button>
+                    <button onclick="voteProject(${project.id}, 'DOWNVOTE')" class="vote-btn downvote">
+                        <span>👎</span>
+                        <span>${project.downvotes || 0}</span>
+                    </button>
+                </div>
+                <p class="date-info">
+                    <span>📅</span>
+                    Created: ${formatDate(project.created_at || new Date())}
+                </p>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        async function createProject() {
+            const titleInput = document.getElementById('projectTitle');
+            const descriptionInput = document.getElementById('projectDescription');
+
+            if (!titleInput || !descriptionInput) {
+                showToast('Form elements not found', 'error');
+                return;
+            }
+
+            const title = titleInput.value.trim();
+            const description = descriptionInput.value.trim();
+
+            if (!title || !description) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/projects`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                showToast('Project submitted successfully!', 'success');
+                titleInput.value = '';
+                descriptionInput.value = '';
+                loadProjects(); // Reload projects
+            } catch (error) {
+                console.error('Error creating project:', error);
+                showToast('Failed to submit project. Please try again.', 'error');
+            }
+        }
+
+        async function voteProject(projectId, voteType) {
+            try {
+                const response = await fetch(`${baseURL}/api/projects/${projectId}/vote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ vote_type: voteType })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                showToast('Vote recorded successfully!', 'success');
+                loadProjects(); // Reload to update vote counts
+            } catch (error) {
+                console.error('Error voting:', error);
+                showToast('Failed to record vote. Please try again.', 'error');
+            }
+        }
+
+        // Townhalls functions
+        async function loadTownhalls() {
+            try {
+                showLoading('townhallsList');
+                const response = await fetch(`${baseURL}/api/townhalls`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const townhalls = await response.json();
+                displayTownhalls(townhalls);
+            } catch (error) {
+                console.error('Error loading townhalls:', error);
+                showEmptyState('townhallsList', 'Unable to load townhalls', 'Please check your connection and try again', '⚠️');
+            }
+        }
+
+        function displayTownhalls(townhalls) {
+            const container = document.getElementById('townhallsList');
+
+            if (!townhalls || townhalls.length === 0) {
+                showEmptyState('townhallsList', 'No townhalls scheduled', 'Check back later for upcoming community meetings', '🏛️');
+                return;
+            }
+
+            container.innerHTML = townhalls.map(townhall => `
+        <div class="card">
+            <div class="project-header">
+                <div class="project-info">
+                    <h3 class="project-title">${escapeHtml(townhall.title || 'Untitled Townhall')}</h3>
+                    <p class="project-description">${escapeHtml(townhall.description || 'No description available')}</p>
+                </div>
+                <span class="status-badge status-${(townhall.status || 'scheduled').toLowerCase()}">${townhall.status || 'SCHEDULED'}</span>
+            </div>
+            <div class="project-footer">
+                <div class="vote-section">
+                    <span class="date-info">
+                        <span>📅</span>
+                        ${formatDate(townhall.scheduled_date || new Date())}
+                    </span>
+                    <span class="date-info">
+                        <span>👥</span>
+                        ${townhall.attendees || 0} attending
+                    </span>
+                </div>
+                <button onclick="joinTownhall(${townhall.id})" class="btn btn-primary">
+                    Join Meeting
+                </button>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        async function joinTownhall(townhallId) {
+            try {
+                const response = await fetch(`${baseURL}/api/townhalls/${townhallId}/join`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                showToast('Successfully joined townhall!', 'success');
+                loadTownhalls(); // Reload to update attendee count
+            } catch (error) {
+                console.error('Error joining townhall:', error);
+                showToast('Failed to join townhall. Please try again.', 'error');
+            }
+        }
+
+        // X Updates functions
+        async function loadXUpdates() {
+            if (isLoading) return;
+            isLoading = true;
+
+            try {
+                showLoading('xUpdatesList');
+
+                const authorInput = document.getElementById('xUpdatesAuthor');
+                const fromDateInput = document.getElementById('xUpdatesFromDate');
+                const toDateInput = document.getElementById('xUpdatesToDate');
+                const limitInput = document.getElementById('xUpdatesLimit');
+
+                const author = authorInput ? authorInput.value : '';
+                const fromDate = fromDateInput ? fromDateInput.value : '';
+                const toDate = toDateInput ? toDateInput.value : '';
+                const limit = limitInput ? limitInput.value : '10';
+
+                const params = new URLSearchParams({
+                    page: currentPage,
+                    limit: limit
+                });
+
+                if (author) params.append('author', author);
+                if (fromDate) params.append('from_date', fromDate);
+                if (toDate) params.append('to_date', toDate);
+
+                const response = await fetch(`${baseURL}/api/x-updates?${params}`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayXUpdates(data.updates || data);
+                updatePagination(data.pagination || { current_page: 1, total_pages: 1 });
+            } catch (error) {
+                console.error('Error loading X updates:', error);
+                showEmptyState('xUpdatesList', 'Unable to load X updates', 'Please check your connection and try again', '⚠️');
+            } finally {
+                isLoading = false;
+            }
+        }
+
+        function displayXUpdates(updates) {
+            const container = document.getElementById('xUpdatesList');
+
+            if (!updates || updates.length === 0) {
+                showEmptyState('xUpdatesList', 'No X updates found', 'Try adjusting your filters or check back later', '🐦');
+                return;
+            }
+
+            container.innerHTML = updates.map(update => `
+        <div class="card">
+            <div class="project-header">
+                <div class="project-info">
+                    <h3 class="project-title">@${escapeHtml(update.author || 'unknown')}</h3>
+                    <p class="project-description">${escapeHtml(update.content || 'No content available')}</p>
+                </div>
+                <span class="date-info">
+                    <span>🐦</span>
+                    ${formatDate(update.created_at || new Date())}
+                </span>
+            </div>
+            <div class="project-footer">
+                <div class="vote-section">
+                    <span class="date-info">
+                        <span>❤️</span>
+                        ${update.likes || 0} likes
+                    </span>
+                    <span class="date-info">
+                        <span>🔄</span>
+                        ${update.retweets || 0} retweets
+                    </span>
+                </div>
+                <a href="${update.url || '#'}" target="_blank" class="btn btn-outline">
+                    View on X
+                </a>
+            </div>
+        </div>
+    `).join('');
+        }
+
+        function updatePagination(pagination) {
+            currentPage = pagination.current_page || 1;
+            totalPages = pagination.total_pages || 1;
+
+            const pageInfo = document.getElementById('pageInfo');
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+
+            if (pageInfo) {
+                pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+            }
+
+            if (prevBtn) {
+                prevBtn.disabled = currentPage <= 1;
+            }
+
+            if (nextBtn) {
+                nextBtn.disabled = currentPage >= totalPages;
+            }
+
+            // Show/hide pagination if only one page
+            const paginationContainer = document.getElementById('xUpdatesPagination');
+            if (paginationContainer) {
+                paginationContainer.style.display = totalPages <= 1 ? 'none' : 'flex';
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadXUpdates();
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadXUpdates();
+            }
+        }
+
+        // Health check function
+        async function healthCheck() {
+            try {
+                const response = await fetch(`${baseURL}/api/health`);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showToast(`System healthy! Version: ${data.version || 'unknown'}`, 'success');
+                } else {
+                    showToast('System health check failed', 'error');
+                }
+            } catch (error) {
+                console.error('Health check error:', error);
+                showToast('Unable to perform health check', 'error');
+            }
+        }
+
+        // Utility function to escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Auto-refresh functionality
+        setInterval(() => {
+            if (!isLoading) {
+                loadProjects();
+                loadTownhalls();
+            }
+        }, 30000); // Refresh every 30 seconds
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        loadProjects();
+                        loadTownhalls();
+                        loadXUpdates();
+                        showToast('Data refreshed', 'info');
+                        break;
+                }
+            }
+        });
+
+        // Make functions globally available
+        window.createProject = createProject;
+        window.voteProject = voteProject;
+        window.joinTownhall = joinTownhall;
+        window.loadXUpdates = loadXUpdates;
+        window.previousPage = previousPage;
+        window.nextPage = nextPage;
+        window.healthCheck = healthCheck;
+    </script>
+</body>
+
+</html>

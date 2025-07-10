@@ -1,0 +1,56 @@
+{
+  "name": "oluora-api",
+  "version": "1.0.0",
+  "description": "Oluora Civic Engagement Platform API",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "NODE_ENV=test jest",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "test:coverage": "NODE_ENV=test jest --coverage",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:reset": "prisma migrate reset",
+    "postinstall": "prisma generate",
+    "deploy": "npm run db:generate && npm run migrate:deploy"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.15.0",
+    "@types/node": "^24.0.12",
+    "axios": "^1.4.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.7.0",
+    "express-validator": "^6.15.0",
+    "helmet": "^6.1.5",
+    "jsonwebtoken": "^9.0.0",
+    "node-cron": "^3.0.2",
+    "pg": "^8.16.3",
+    "prisma": "^4.15.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.2",
+    "typeorm": "^0.3.25",
+    "typescript": "^5.8.3",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^6.3.3"
+  },
+  "keywords": [
+    "civic-engagement",
+    "api",
+    "express",
+    "prisma",
+    "postgresql"
+  ],
+  "author": "Oluora Team",
+  "license": "MIT"
+}

@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Platform</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --oxblood: #800020;
+            --green: #006400;
+            --light-gold: #F7EFD2;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .nav-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--gold);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-button {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-button:hover {
+            color: var(--gold);
+        }
+
+        .nav-button.primary {
+            background-color: var(--green);
+            color: white;
+            border-radius: 6px;
+        }
+
+        .nav-button.primary:hover {
+            background-color: #005500;
+            color: white;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+
+        .container {
+            max-width: 768px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            color: var(--dark-gray);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 16px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .card.hidden {
+            display: none;
+        }
+
+        /* Forms */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group.grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .form-group.grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+            margin-bottom: 4px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background-color: var(--gold);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #c19d2e;
+        }
+
+        .btn-success {
+            background-color: var(--green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #005500;
+        }
+
+        .btn-danger {
+            background-color: var(--oxblood);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #660018;
+        }
+
+        .btn-secondary {
+            background-color: #9ca3af;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #6b7280;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Status badges */
+        .status-badge {
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            text-transform: uppercase;
+        }
+
+        .status-proposed {
+            background-color: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-approved {
+            background-color: #d1fae5;
+            color: var(--green);
+        }
+
+        .status-rejected {
+            background-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .status-scheduled {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-ongoing {
+            background-color: #d1fae5;
+            color: var(--green);
+        }
+
+        .status-completed {
+            background-color: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .status-cancelled {
+            background-color: #fecaca;
+            color: #dc2626;
+        }
+
+        .status-admin {
+            background-color: #fecaca;
+            color: var(--oxblood);
+        }
+
+        .status-user {
+            background-color: #d1fae5;
+            color: var(--green);
+        }
+
+        /* Project/Townhall cards */
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--dark-gray);
+            margin-bottom: 8px;
+        }
+
+        .project-description {
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        .project-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .vote-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .vote-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .vote-btn.upvote {
+            color: var(--green);
+        }
+
+        .vote-btn.upvote:hover {
+            background-color: #f0f9ff;
+        }
+
+        .vote-btn.downvote {
+            color: var(--oxblood);
+        }
+
+        .vote-btn.downvote:hover {
+            background-color: #fef2f2;
+        }
+
+        .date-info {
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: end;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .pagination-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .page-info {
+            padding: 8px 16px;
+            color: var(--dark-gray);
+            font-size: 0.875rem;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--gold);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .loading-text {
+            color: #6b7280;
+            margin-top: 16px;
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            background-color: var(--green);
+        }
+
+        .toast.error {
+            background-color: var(--oxblood);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 16px;
+            }
+
+            .nav-buttons {
+                gap: 8px;
+            }
+
+            .nav-button {
+                padding: 6px 12px;
+            }
+
+            main {
+                padding: 24px 16px;
+            }
+
+            .project-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .project-footer {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .control-group {
+                width: 100%;
+            }
+        }
+
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-4 {
+            margin-bottom: 16px;
+        }
+
+        .mt-4 {
+            margin-top: 16px;
+        }
+
+        .space-y-4 > * + * {
+            margin-top: 16px;
+        }
+
+        .space-y-2 > * + * {
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .user-details {
+            margin-bottom: 16px;
+        }
+
+        .user-details p {
+            margin-bottom: 8px;
+        }
+
+        .user-details strong {
+            color: var(--dark-gray);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav废弃container">
+            <div>
+                <h1 class="nav-title">Community Platform</h1>
+            </div>
+            <div class="nav-buttons">
+                <button onclick="showSection('auth')" class="nav-button">
+                    Authentication
+                </button>
+                <button onclick="showSection('projects')" class="nav-button">
+                    Projects
+                </button>
+                <button onclick="showSection('townhalls')" class="nav-button">
+                    Townhalls
+                </button>
+                <button onclick="showSection('xupdates')" class="nav-button">
+                    X Updates
+                </button>
+                <button onclick="healthCheck()" class="nav-button primary">
+                    Health Check
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Authentication Section -->
+        <div id="auth" class="section active">
+            <div class="container">
+                <h2>Authentication</h2>
+                
+                <!-- User Info (when logged in) -->
+                <div id="userInfo" class="card hidden">
+                    <h3>User Information</h3>
+                    <div id="userDetails" class="user-details"></div>
+                    <button onclick="logout()" class="btn btn-danger btn-full">
+                        Logout
+                    </button>
+                </div>
+
+                <!-- Authentication Forms -->
+                <div id="authForms" class="form-grid">
+                    <!-- Register Form -->
+                    <div class="card">
+                        <h3>Register</h3>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerUsername">Username</label>
+                            <input type="text" id="registerUsername" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Password</label>
+                            <input type="password" id="registerPassword" required>
+                        </div>
+                        <button onclick="register()" class="btn btn-primary btn-full">
+                            Register
+                        </button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div class="card">
+                        <h3>Login</h3>
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" required>
+                        </div>
+                        <button onclick="login()" class="btn btn-success btn-full">
+                            Login
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div id="projects" class="section">
+            <h2>Projects</h2>
+            
+            <!-- Create Project Form -->
+            <div class="card">
+                <h3>Create New Project</h3>
+                <div class="form-group grid">
+                    <div>
+                        <label for="projectTitle">Title</label>
+                        <input type="text" id="projectTitle" required>
+                    </div>
+                    <div>
+                        <label for="projectDescription">Description</label>
+                        <textarea id="projectDescription" rows="3" required></textarea>
+                    </div>
+                </div>
+                <button onclick="createProject()" class="btn btn-primary mt-4">
+                    Create Project
+                </button>
+            </div>
+
+            <!-- Projects List -->
+            <div id="projectsList" class="space-y-4">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading projects...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Townhalls Section -->
+        <div id="townhalls" class="section">
+            <h2>Townhalls</h2>
+            
+            <!-- Create Townhall Form (Admin Only) -->
+            <div id="townhallForm" class="card hidden">
+                <h3>Create New Townhall</h3>
+                <div class="form-group">
+                    <label for="townhallTitle">Title</label>
+                    <input type="text" id="townhallTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="townhallDescription">Description</label>
+                    <textarea id="townhallDescription" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="townhallScheduled">Scheduled Date & Time</label>
+                    <input type="datetime-local" id="townhallScheduled" required>
+                </div>
+                <div class="form-group">
+                    <label for="townhallZoomLink">Zoom Link</label>
+                    <input type="url" id="townhallZoomLink" placeholder="Optional">
+                </div>
+                <button onclick="createTownhall()" class="btn btn-primary">
+                    Create Townhall
+                </button>
+            </div>
+
+            <!-- Townhalls List -->
+            <div id="townhallsList" class="space-y-4">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading townhalls...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- X Updates Section -->
+        <div id="xupdates" class="section">
+            <h2>X Updates</h2>
+            
+            <!-- Controls -->
+            <div class="card">
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="xUpdatesAuthor">Author</label>
+                        <input type="text" id="xUpdatesAuthor" placeholder="Filter by author">
+                    </div>
+                    <div class="control-group">
+                        <label for="xUpdatesFromDate">From Date</label>
+                        <input type="date" id="xUpdatesFromDate">
+                    </div>
+                    <div class="control-group">
+                        <label for="xUpdatesToDate">To Date</label>
+                        <input type="date" id="xUpdatesToDate">
+                    </div>
+                    <div class="control-group">
+                        <label for="xUpdatesLimit">Limit</label>
+                        <select id="xUpdatesLimit">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                    <button onclick="loadXUpdates()" class="btn btn-primary">
+                        Apply Filters
+                    </button>
+                    <button id="refreshXUpdates" onclick="refreshXUpdates()" class="btn btn-success hidden">
+                        Refresh Updates
+                    </button>
+                </div>
+            </div>
+
+            <!-- X Updates List -->
+            <div id="xUpdatesList" class="space-y-4">
+                <div class="loading-container">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Loading X updates...</p>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div id="xUpdatesPagination" class="pagination">
+                <div class="pagination-controls">
+                    <button onclick="previousPage()" id="prevPageBtn" class="btn btn-secondary">
+                        Previous
+                    </button>
+                    <span id="pageInfo" class="page-info">Page 1</span>
+                    <button onclick="nextPage()" id="nextPageBtn" class="btn btn-secondary">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentSection = 'auth';
+        let currentPage = 1;
+        let totalPages = 1;
+        const baseURL = 'http://localhost:3000'; // Adjust as needed
+
+        // Authentication functions
+        function getAuthHeaders() {
+            const token = localStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function showSection(section) {
+            if ((section === 'projects' || section === 'townhalls') && !currentUser) {
+                showToast('Please log in to access this section', 'error');
+                showSection('auth');
+                return;
+            }
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            currentSection = section;
+            
+            // Load data for the section
+            if (section === 'projects' && currentUser) {
+                loadProjects();
+            } else if (section === 'townhalls' && currentUser) {
+                loadTownhalls();
+            } else if (section === 'xupdates') {
+                loadXUpdates();
+            }
+        }
+
+        async function register() {
+            const email = document.getElementById('registerEmail').value;
+            const username = document.getElementById('registerUsername').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!email || !username || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.data.token);
+                    currentUser = data.data.user;
+                    showUserInfo();
+                    showToast('Registration successful!');
+                    clearAuthForms();
+                } else {
+                    showToast(data.message || 'Registration failed', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.data.token);
+                    currentUser = data.data.user;
+                    showUserInfo();
+                    showToast('Login successful!');
+                    clearAuthForms();
+                } else {
+                    showToast(data.message || 'Login failed', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            showAuthForms();
+            showToast('Logged out successfully');
+            showSection('auth');
+        }
+
+        function showUserInfo() {
+            if (!currentUser) return;
+
+            const userDetails = document.getElementById('userDetails');
+            userDetails.innerHTML = `
+                <p><strong>Email:</strong> ${currentUser.email}</p>
+                <p><strong>Username:</strong> ${currentUser.username}</p>
+                <p><strong>Role:</strong> <span class="status-badge ${currentUser.role === 'ADMIN' ? 'status-admin' : 'status-user'}">${currentUser.role}</span></p>
+            `;
+            
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('authForms').classList.add('hidden');
+            
+            // Show/hide admin features
+            if (currentUser.role === 'ADMIN') {
+                document.getElementById('townhallForm').classList.remove('hidden');
+                document.getElementById('refreshXUpdates').classList.remove('hidden');
+            }
+        }
+
+        function showAuthForms() {
+            document.getElementById('userInfo').classList.add('hidden');
+            document.getElementById('authForms').classList.remove('hidden');
+            document.getElementById('townhallForm').classList.add('hidden');
+            document.getElementById('refreshXUpdates').classList.add('hidden');
+            document.getElementById('projectsList').innerHTML = '<div class="loading-container"><div class="spinner"></div><p class="loading-text">Loading projects...</p></div>';
+            document.getElementById('townhallsList').innerHTML = '<div class="loading-container"><div class="spinner"></div><p class="loading-text">Loading townhalls...</p></div>';
+        }
+
+        function clearAuthForms() {
+            document.getElementById('registerEmail').value = '';
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        // Projects functions
+        async function loadProjects() {
+            try {
+                const response = await fetch(`${baseURL}/api/projects`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayProjects(data.data);
+                } else {
+                    showToast(data.message || 'Failed to load projects', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function displayProjects(projects) {
+            const projectsList = document.getElementById('projectsList');
+            
+            if (!projects || projects.length === 0) {
+                projectsList.innerHTML = '<p class="text-center loading-text">No projects found.</p>';
+                return;
+            }
+
+            projectsList.innerHTML = projects.map(project => `
+                <div class="card">
+                    <div class="project-header">
+                        <div class="project-info">
+                            <h3 class="project-title">${project.title}</h3>
+                            <p class="project-description">${project.description}</p>
+                        </div>
+                        <span class="status-badge ${getStatusClass(project.status)}">${project.status}</span>
+                    </div>
+                    <div class="project-footer">
+                        <div class="vote-buttons">
+                            <button onclick="voteProject(${project.id}, 'UPVOTE')" class="vote-btn upvote">
+                                <span>👍</span>
+                                <span>${project.upvote_count || 0}</span>
+                            </button>
+                            <button onclick="voteProject(${project.id}, 'DOWNVOTE')" class="vote-btn downvote">
+                                <span>👎</span>
+                                <span>${project.downvote_count || 0}</span>
+                            </button>
+                        </div>
+                        <p class="date-info">Created: ${new Date(project.created_at).toLocaleDateString()}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusClass(status) {
+            switch (status) {
+                case 'PROPOSED': return 'status-proposed';
+                case 'APPROVED': return 'status-approved';
+                case 'REJECTED': return 'status-rejected';
+                case 'SCHEDULED': return 'status-scheduled';
+                case 'ONGOING': return 'status-ongoing';
+                case 'COMPLETED': return 'status-completed';
+                case 'CANCELLED': return 'status-cancelled';
+                default: return 'status-proposed';
+            }
+        }
+
+        async function createProject() {
+            const title = document.getElementById('projectTitle').value;
+            const description = document.getElementById('projectDescription').value;
+
+            if (!title || !description) {
+                showToast('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/projects`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ title, description })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast('Project created successfully!');
+                    document.getElementById('projectTitle').value = '';
+                    document.getElementById('projectDescription').value = '';
+                    loadProjects();
+                } else {
+                    showToast(data.message || 'Failed to create project', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        async function voteProject(projectId, voteType) {
+            try {
+                const response = await fetch(`${baseURL}/api/projects/${projectId}/vote`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ vote_type: voteType })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast('Vote recorded successfully!');
+                    loadProjects();
+                } else {
+                    showToast(data.message || 'Failed to record vote', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        // Townhalls functions
+        async function loadTownhalls() {
+            try {
+                const response = await fetch(`${baseURL}/api/townhalls`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayTownhalls(data.data);
+                } else {
+                    showToast(data.message || 'Failed to load townhalls', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function displayTownhalls(townhalls) {
+            const townhallsList = document.getElementById('townhallsList');
+            
+            if (!townhalls || townhalls.length === 0) {
+                townhallsList.innerHTML = '<p class="text-center loading-text">No townhalls found.</p>';
+                return;
+            }
+
+            townhallsList.innerHTML = townhalls.map(townhall => `
+                <div class="card">
+                    <div class="project-header">
+                        <div class="project-info">
+                            <h3 class="project-title">${townhall.title}</h3>
+                            <p class="project-description">${townhall.description}</p>
+                        </div>
+                        <span class="status-badge ${getStatusClass(townhall.status)}">${townhall.status}</span>
+                    </div>
+                    <div class="project-footer">
+                        <p class="date-info">Scheduled: ${new Date(townhall.scheduled_at).toLocaleString()}</p>
+                        ${townhall.zoom_link ? `<a href="${townhall.zoom_link}" class="link" target="_blank">Join Zoom</a>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function createTownhall() {
+            if (!currentUser || currentUser.role !== 'ADMIN') {
+                showToast('Only admins can create townhalls', 'error');
+                return;
+            }
+
+            const title = document.getElementById('townhallTitle').value;
+            const description = document.getElementById('townhallDescription').value;
+            const scheduled_at = document.getElementById('townhallScheduled').value;
+            const zoom_link = document.getElementById('townhallZoomLink').value || null;
+
+            if (!title || !description || !scheduled_at) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/townhalls`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    },
+                    body: JSON.stringify({ title, description, scheduled_at, zoom_link })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast('Townhall created successfully!');
+                    document.getElementById('townhallTitle').value = '';
+                    document.getElementById('townhallDescription').value = '';
+                    document.getElementById('townhallScheduled').value = '';
+                    document.getElementById('townhallZoomLink').value = '';
+                    loadTownhalls();
+                } else {
+                    showToast(data.message || 'Failed to create townhall', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        // X Updates functions
+        async function loadXUpdates(page = 1) {
+            try {
+                const author = document.getElementById('xUpdatesAuthor').value;
+                const from_date = document.getElementById('xUpdatesFromDate').value;
+                const to_date = document.getElementById('xUpdatesToDate').value;
+                const limit = document.getElementById('xUpdatesLimit').value;
+                const query = new URLSearchParams({ page, limit });
+                if (author) query.set('author', author);
+                if (from_date) query.set('from_date', from_date);
+                if (to_date) query.set('to_date', to_date);
+
+                const response = await fetch(`${baseURL}/api/x-updates?${query.toString()}`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayXUpdates(data.data, data.meta);
+                } else {
+                    showToast(data.message || 'Failed to load X updates', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function displayXUpdates(updates, meta) {
+            const xUpdatesList = document.getElementById('xUpdatesList');
+            
+            if (!updates || updates.length === 0) {
+                xUpdatesList.innerHTML = '<p class="text-center loading-text">No X updates found.</p>';
+                return;
+            }
+
+            xUpdatesList.innerHTML = updates.map(update => `
+                <div class="card">
+                    <div class="project-header">
+                        <div class="project-info">
+                            <h3 class="project-title">${update.author}</h3>
+                            <p class="project-description">${update.content}</p>
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <p class="date-info">Posted: ${new Date(update.posted_at).toLocaleString()}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            currentPage = meta.page;
+            totalPages = meta.pages;
+            document.getElementById('pageInfo').textContent = `Page ${currentPage}`;
+            document.getElementById('prevPageBtn').disabled = currentPage === 1;
+            document.getElementById('nextPageBtn').disabled = currentPage === totalPages;
+        }
+
+        async function refreshXUpdates() {
+            if (!currentUser || currentUser.role !== 'ADMIN') {
+                showToast('Only admins can refresh X updates', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${baseURL}/api/x-updates/refresh`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...getAuthHeaders()
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast('X Updates refreshed successfully!');
+                    loadXUpdates();
+                } else {
+                    showToast(data.message || 'Failed to refresh X updates', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                loadXUpdates(currentPage - 1);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                loadXUpdates(currentPage + 1);
+            }
+        }
+
+        // Health Check
+        async function healthCheck() {
+            try {
+                const response = await fetch(`${baseURL}/api/health`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast(`Server Status: ${data.status}, Timestamp: ${new Date(data.timestamp).toLocaleString()}`);
+                } else {
+                    showToast(data.message || 'Failed to check server health', 'error');
+                }
+            } catch (error) {
+                showToast('Network error occurred', 'error');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                // Attempt to validate token and fetch user info
+                fetch(`${baseURL}/api/auth/validate`, {
+                    headers: getAuthHeaders()
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.user) {
+                        currentUser = data.user;
+                        showUserInfo();
+                    } else {
+                        localStorage.removeItem('token');
+                        showAuthForms();
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem('token');
+                    showAuthForms();
+                });
+            }
+            showSection('auth');
+        });
+    </script>
+</body>
+</html>

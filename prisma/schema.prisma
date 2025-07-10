@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Remove shadowDatabaseUrl for Neon
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  username      String    @unique
+  password_hash String
+  role          Role      @default(USER)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  // Relations
+  projects     Project[]
+  votes        Vote[]
+  townhalls    Townhall[]
+
+  @@map("users")
+}
+
+model Project {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String
+  proposer_id  Int
+  status       ProjectStatus @default(PROPOSED)
+  created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
+
+  // Relations
+  proposer User   @relation(fields: [proposer_id], references: [id], onDelete: Cascade)
+  votes    Vote[]
+
+  @@map("projects")
+}
+
+model Vote {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  project_id Int
+  vote_type  VoteType
+  created_at DateTime @default(now())
+
+  // Relations
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+
+  // Unique constraint to prevent duplicate votes
+  @@unique([user_id, project_id])
+  @@map("votes")
+}
+
+model Townhall {
+  id           Int             @id @default(autoincrement())
+  title        String
+  description  String
+  organizer_id Int
+  scheduled_at DateTime
+  zoom_link    String?
+  status       TownhallStatus  @default(SCHEDULED)
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
+
+  // Relations
+  organizer User @relation(fields: [organizer_id], references: [id], onDelete: Cascade)
+
+  @@map("townhalls")
+}
+
+model XUpdate {
+  id         Int      @id @default(autoincrement())
+  post_id    String   @unique
+  content    String
+  author     String
+  posted_at  DateTime
+  fetched_at DateTime @default(now())
+  created_at DateTime @default(now())
+
+  @@map("x_updates")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ProjectStatus {
+  PROPOSED
+  APPROVED
+  REJECTED
+}
+
+enum VoteType {
+  UPVOTE
+  DOWNVOTE
+}
+
+enum TownhallStatus {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
